@@ -11,12 +11,11 @@ ENV PATH /usr/local/bin:$PATH
 ENV LANG C.UTF-8
 
 # extra dependencies (over what buildpack-deps already includes)
-RUN apt-get update && apt-get install -y debconf-utils \
-&& echo "tzdata  tzdata/Areas    select  $TZ_AREA" | debconf-set-selections \
-&& echo "tzdata  tzdata/Zones/Australia  select  $TZ_ZONE" | debconf-set-selections \
-&& apt-get install -y --no-install-recommends \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
 		tk-dev \
 		uuid-dev \
+	&& echo "$TZ_AREA/$TZ_ZONE" > /etc/timezone \
+	&& dpkg-reconfigure -f noninteractive tzdata
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV GPG_KEY 0D96DF4D4110E5C43FBFB17F2D347EA6AA65421D
