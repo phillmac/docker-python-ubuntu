@@ -1,5 +1,3 @@
-
-
 FROM buildpack-deps:18.04
 
 # ensure local python is preferred over distribution python
@@ -10,7 +8,10 @@ ENV PATH /usr/local/bin:$PATH
 ENV LANG C.UTF-8
 
 # extra dependencies (over what buildpack-deps already includes)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y debconf-utils \
+&& echo "tzdata  tzdata/Areas    select  Australia" | debconf-set-selections \
+&& echo "tzdata  tzdata/Zones/Australia  select  Sydney" | debconf-set-selections \
+&& apt-get install -y --no-install-recommends \
 		tk-dev \
 		uuid-dev \
 	&& rm -rf /var/lib/apt/lists/*
