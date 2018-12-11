@@ -15,6 +15,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-ins
 		tk-dev \
 		uuid-dev \
 	&& echo "$TZ_AREA/$TZ_ZONE" > /etc/timezone \
+	&& unlink /etc/localtime \
 	&& dpkg-reconfigure -f noninteractive tzdata \
 	&& rm -rf /var/lib/apt/lists/*
 
